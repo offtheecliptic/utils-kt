@@ -1,0 +1,101 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.20-M1'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.20-M1'
+}
+
+group 'offtheecliptic'
+version '0.0.3'
+
+apply plugin: "maven"  
+
+import org.gradle.jvm.tasks.Jar
+
+//create a single Jar with all dependencies
+task uberJar(type: Jar) {
+    manifest {
+        attributes  'Implementation-Title': 'Kotlin Utilities',  
+        	        'Implementation-Version': '0.0.3',  //version,
+        	        'Main-Class': 'offtheecliptic.utils.examples.partial.PartialUtils01'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    // from(configurations.collect { if (it.isDirectory) it else zipTree(it) })
+    // with(tasks.jar.get() as CopySpec)
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    // def datetime_version = '0.1.0'
+    // implementation "offtheecliptic:datetime:$datetime_version"
+
+    //compile "offtheecliptic:datetime:$datetime_version"
+    //implementation(files("lib/datetime-${datetime_version}.jar"))
+
+    //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    //implementation project(':datetime')
+
+    // Not sure if need this or not, since there's a stdlib below (with no jdkN)
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+        
+    def coroutines_version = '1.5.0-RC'
+    // Need this or coroutines not bundled when run uber-jar task
+    compile        "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    // Do not need this, at least for uber-jar
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-swing:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutines_version"
+
+    def logback_version = '1.0.13'
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+
+    // def retrofit_version = '2.9.0'
+    // implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    // implementation "com.squareup.retrofit2:retrofit-mock:$retrofit_version"
+    // implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+    // implementation 'com.squareup.okhttp3:okhttp:4.3.1'
+
+    def rxjava_version = '2.2.21'
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    def rxkotlin_version = '2.4.0'
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+    //implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
+    def junit_version = '4.13.2'
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
+    def kotlin_version = '1.5.20-M1'
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "15"
+        //freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "15"
+        //freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
+
+sourceSets {
+    main.kotlin.srcDirs = ['src']
+    main.resources.srcDirs = ['resources']
+    test.kotlin.srcDirs = ['test']
+}

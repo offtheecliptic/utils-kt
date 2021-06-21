@@ -1,0 +1,16 @@
+// pluginManagement {
+//   plugins {
+//     id 'org.jetbrains.kotlin.jvm' version '1.5.20-M1'
+//     id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.20-M1'
+//   }
+//   repositories {
+//     gradlePluginPortal()
+//     mavenCentral()
+//     jcenter()
+//   }
+// }
+rootProject.name = 'utils'
+
+// include ":datetime"
+// project(":datetime").projectDir = file("../datetime")
+
