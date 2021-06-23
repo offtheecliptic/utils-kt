@@ -4,28 +4,125 @@
 
 This is a collection of utilities, each in its own sub-package under offtheecliptic.utils.
 
+## Library Specification
+
+group:      offtheecliptic
+artifact:   utils
+version:    0.0.3
+
 ## Contents
 
 The following utilities are provided:
 
-    string          functions that operate on strings
-    map             functions that operate on maps
-    map.structure   interfce that adds functions to objects that can be represented as maps\
-    partial         functions that allow partial application of functions
-    stack           pseudo-type for a LIFO stack, with push, pop, etc functions
-
+* list           functions that operate on lists
+* logging        functions for logging to console
+* map            functions that operate on maps
+* map.structure  interface that adds functions to objects that can be represented as maps
+* partial        functions that allow partial application of functions
+* singleton      class that transforms a regular class with a single-arg constructor into a singleton; used for configuring a singleton
+* stack          pseudo-type for a LIFO stack, with push, pop, etc
+* string         functions that operate on strings
 
 ## Usage
 
-group:      offtheecliptic
-artifact:   utils
-version:    0.0.1
+See Development section below for build information.
+### Imports
+
+import offtheecliptic.utils.<sub-package>.*
+
+For example:
+
+import offtheecliptic.utils.map.structure.*
+import offtheecliptic.utils.singleton.SingletonContainer
+
+## Library Contents
+
+### utils.list
+
+### utils.logging
+
+### utils.map
+### utils.map.structure
+
+### utils.partial
+
+import offtheecliptic.utils.partial
+
+Provides functions for partial application of Kotlin functions.  Not nearly as nice as Clojure's partial function, but better than nothing.
+
+Functions:
+    partial21
+    partial22
+
+#### partial21
+
+Creates a partial for a 2-arg function, turning it into a 1-arg function. The type of the two arguments is the same for this function.
+ 
+Example function to partial out: 
+    fun add(a: Int, b:Int): Int; val add1: (Int) -> Int = partial2(::add, 1)
+ 
+Usage: 
+    fun <T> f2(a:T, b:T): T                  // 2-arg fn
+    val f1: (T) -> T = partial2(aValue, f2)  // Turns 2-arg fn into 1-arg fn
+    val x: T = f1(bValue)                    // Invoke the partial'd fn
+
+#### partial22
+
+Creates a partial for a 2-arg function, turning it into a 1-arg function. This differs from partial2 in that the type of the 1st argument (the one being partial'd) is different than the type of the second one (the one that remains after the partial application).
+
+Example: 
+    fun quadratic(p: List<Int>, x: Int): Int { return p[0] + p[1]*x + p[2]*x*x }
+    val quadWithParams: (Int) -> Int = partial22(::quadratic, listOf(2,3,4))
+    val y: Int = quadWithParams(10)  ==> 432
+  
+### utils.singleton
+
+import offtheecliptic.utils.singleton.SingletonContainer
+
+Defines a class that can be extended by a class with a single private argument, turning that class into a configurable singleton.
+
+class SingletonContainer
+    Extend this class to turn a single-arg class into a singleton.
+
+    For example:
+    class Example private constructor(arg: ArgClass) {
+        // local variables
+        init {
+            // Initialize local variables using 'arg' argument
+        }
+        // The following will act as static functions
+        fun doSomeStuff(...): <ReturnType> { ... }  
+        fun doMoreStuff(...): <ReturnType> { ... }  
+        
+        // The name of this class must be specified in the generic.
+        // The argument to SingletonContainer can be either a:
+        //    1-arg fn, or 
+        //    ref to the singleton
+        companion object : SingletonContainer<Example, ArgClass>(::Example)
+    }
+
+    The singleton may now be invoked using the following syntax; its initialization will be lazy and thread-safe:
+
+    Example.getInstance(context).doSomeStuff()
+ 
+    Reference:
+        https://bladecoder.medium.com/kotlin-singletons-with-argument-194ef06edd9e
+
+
+### utils.map.stack
+
+### utils.map.string
+
+
+
+## Development
+
 
 ### Dependency Specification
 
 These assume that you have installed the library in your local Maven repository.   
 
-### Maven
+#### Maven
 
 In your pom.xml file, put in the following dependency under dependencies/dependency.
 
@@ -33,7 +130,7 @@ In your pom.xml file, put in the following dependency under dependencies/depende
     <artifactId>utils</artifactId>
     <version>${lib.version}</version>
 
-### Gradle
+#### Gradle
 
 You should also have the following under repositories.
 
@@ -41,48 +138,8 @@ You should also have the following under repositories.
 
 Put the following under dependencies.
 
-    implementation "offtheecliptic:utils:${data_pipeline.version}"
+    implementation "offtheecliptic:utils:${utils.version}"
 
-### Imports
-
-import offtheecliptic.utils.<sub-package>.*
-
-
-## Details on Each Utility
-
-### utils.partial
-
-### utils.map
-
-
-### utils.block
-
-Read in blocks of configuration info.  File format is:
- 
-   Title: Some title
-   Definition: 
-       <Type>: <Name1>
-           <FieldName1>: <FieldValue11>
-           <FieldName1>: <FieldValue12>
-           <FieldName2>: <FieldValue21>
-   Definition: 
-       <Type>: <Name2>
-           <FieldName1>: <FieldValue11>
-           <FieldName2>: <FieldValue21>
-           <FieldName2>: <FieldValue22>
-           <FieldName3>: <FieldValue31>
-   ....
-
-Algorithm:
-   readLinesIntoSeq(filename: String): List<String>
-   splitSeqIntoChunks(list: List<String>): List<List<String>>
-       //Partitions the input sequence on lines with the word 'Definition:'
-   chunksIntoBlocks(chunks: List<List<String>>): BlockSet
-       blocks = List>Block>
-
-
-
-## Development
 
 ### Build and Unit Test
 
