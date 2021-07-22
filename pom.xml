@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>offtheecliptic</groupId>
-    <artifactId>utils</artifactId>
-    <version>0.0.3</version>
+    <artifactId>utils-kt</artifactId>
+    <version>0.0.4</version>
 
     <properties>
         <!-- <project.basedir>/Users/rscan/dev/ws/kotlin/caps</project.basedir> -->

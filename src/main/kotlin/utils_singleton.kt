@@ -3,6 +3,7 @@
 ////
 //// This utility can be used to turn a regular class into a singleton.  The class should
 //// have exactly one constructor argument, specified through a private constructor.
+//// 
 //// Usage is as follows:
 ////
 ////    class ExampleSingleton private constructor(arg: ArgClass) {

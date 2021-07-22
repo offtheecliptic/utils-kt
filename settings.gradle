@@ -9,7 +9,7 @@
 //     jcenter()
 //   }
 // }
-rootProject.name = 'utils'
+rootProject.name = 'utils-kt'
 
 // include ":datetime"
 // project(":datetime").projectDir = file("../datetime")

@@ -14,21 +14,21 @@ version:    0.0.3
 
 The following utilities are provided:
 
-* list           functions that operate on lists
-* logging        functions for logging to console
-* map            functions that operate on maps
-* map.structure  interface that adds functions to objects that can be represented as maps
-* partial        functions that allow partial application of functions
-* singleton      class that transforms a regular class with a single-arg constructor into a singleton; used for configuring a singleton
-* stack          pseudo-type for a LIFO stack, with push, pop, etc
-* string         functions that operate on strings
+* list           - functions that operate on lists
+* logging        - functions for logging to console
+* map            - functions that operate on maps
+* map.structure  - interface that adds functions to objects that can be represented as maps
+* partial        - functions that allow partial application of functions
+* singleton      - class that transforms a regular class with a single-arg constructor into a singleton; used for configuring a singleton
+* stack          - pseudo-type for a LIFO stack, with push, pop, etc
+* string         - functions that operate on strings
 
 ## Usage
 
 See Development section below for build information.
 ### Imports
 
-import offtheecliptic.utils.<sub-package>.*
+import offtheecliptic.utils.{sub-package}.*
 
 For example:
 
@@ -62,7 +62,7 @@ Example function to partial out:
     fun add(a: Int, b:Int): Int; val add1: (Int) -> Int = partial2(::add, 1)
  
 Usage: 
-    fun <T> f2(a:T, b:T): T                  // 2-arg fn
+    fun <<T>> f2(a:T, b:T): T                  // 2-arg fn
     val f1: (T) -> T = partial2(aValue, f2)  // Turns 2-arg fn into 1-arg fn
     val x: T = f1(bValue)                    // Invoke the partial'd fn
 
@@ -101,7 +101,8 @@ class SingletonContainer
         companion object : SingletonContainer<Example, ArgClass>(::Example)
     }
 
-    The singleton may now be invoked using the following syntax; its initialization will be lazy and thread-safe:
+    The singleton may now be invoked using the following syntax; 
+    its initialization will be lazy and thread-safe:
 
     Example.getInstance(context).doSomeStuff()
  

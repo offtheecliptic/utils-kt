@@ -4,8 +4,9 @@ plugins {
 }
 
 group 'offtheecliptic'
-version '0.0.3'
+version '0.0.4'
 
+// This allow you to install an uberjar in the maven rep via ./gradlew install
 apply plugin: "maven"  
 
 import org.gradle.jvm.tasks.Jar
